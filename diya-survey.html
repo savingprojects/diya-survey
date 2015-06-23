@@ -1,19 +1,176 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../core-animated-pages/core-animated-pages.html">
 
 
-<polymer-element name="diya-survey" attributes="selector ticketName label from">
+<polymer-element name="diya-survey" attributes="selector question ticketDesc ticketType from leafCount minLabel maxLabel threshold">
 	<template>
 		<style>
+			:host{
+				display: flex;
+				font-size: 2em;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				position: relative;
+				color: white;
+				text-shadow: 2px 2px #000;
+			}
+
+			#questionPages{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				position: relative;
+				width: 100%;
+				height: 100%;
+			}
+
+			#question, #thanks{
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+			}
+
+
+			#scale{
+				display: flex;
+				flex-direction: column;
+			}
+
+			#leaves{
+				display: flex;
+				flex-direction: row;
+				justify-content: space-between;
+				align-items: center;
+				position: relative;
+			}
+
+			#leaves img{
+				display: block;
+				width: 80px;
+			}
+
+			#labels{
+				display: flex;
+				justify-content: space-between;
+				margin-top: 20px;
+				border-top: 1px solid lightgray;
+			}
+			#labels p{
+				margin-top: 20px;
+			}
 
 		</style>
+
+		<core-animated-pages id="questionPages" transitions="cross-fade-all">
+
+			<section id="question">
+				<h1>{{question}}</h1>
+
+				<section id="scale">
+					<section id="leaves">
+						<template repeat="{{leaf, i in leaves}}">
+							<img src="{{leafIcon[leaf]}}" level-id="{{i}}" on-tap="{{actionLevel}}" />
+						</template>
+					</section>
+
+					<section id="labels">
+						<p>{{minLabel}}</p>
+						<p>neutre</p>
+						<p>{{maxLabel}}</p>
+					</section>
+
+					<paper-button on-tap="{{actionValidate}}">Valider votre réponse</paper-button>
+				</section>
+			</section>
+			<section id="thanks">
+				<h2>Merci de votre réponse !</h2>
+			</section>
+		</core-animated-pages>
+
 
 	</template>
 
 	<script>
 		Polymer({
-			ready: function(){
 
+			leafCount: 5,
+			threshold: 1,
+			from: 'anonymous',
+
+			ready: function(){
+				this.leaves = [];
+
+				this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
+
+				this.leafIcon = [
+					"bower_components/diya-survey/leaf_off.png",
+					"bower_components/diya-survey/leaf.png"
+				];
+
+				for(var i=0;i<this.leafCount;i++){
+					this.leaves.push(0);
+				}
+
+				this.setLevel(this.level);
+			},
+
+			setLevel: function(level){
+				this.level = level;
+				for(var i=0; i<this.leaves.length; i++){
+					if(i<=level) this.leaves[i] = 1;
+					else this.leaves[i] = 0;
+				}
+			},
+
+			postTicket: function(){
+				if(!this.selector) return ;
+
+				d1(this.selector).request({
+					service: 'ticketing',
+					func: 'CreateTicket',
+					data: {
+						from: this.from,
+						description: this.ticketDesc,
+						type: this.ticketType
+					}
+				}, function(peerId, err, data){
+					console.log(err);
+					console.log(data);
+					console.log(peerId);
+				});
+
+			},
+
+			showQuestion: function(){
+				this.$.questionPages.selected = 0;
+			},
+
+			showThanks: function(){
+				this.$.questionPages.selected = 1;
+			},
+
+			actionLevel: function(evt){
+				var levelId = parseInt(evt.target.attributes["level-id"].value);
+				this.setLevel(levelId);
+			},
+
+			actionValidate: function(evt){
+				var that = this;
+
+				if(this.level < this.threshold){
+					console.log("alert, posting ticket");
+					this.postTicket();
+				}
+
+				this.showThanks();
+				setTimeout(this.showQuestion.bind(this), 2000);
+
+				that.setLevel(that.initialLevel);
 			}
+
 		})
 	</script>
 </polymer-element>
