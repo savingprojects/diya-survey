@@ -166,7 +166,10 @@
 				}
 
 				this.showThanks();
-				setTimeout(this.showQuestion.bind(this), 2000);
+				setTimeout(function(){
+					that.fire('answered');
+					that.showQuestion();
+				}, 2000);
 
 				that.setLevel(that.initialLevel);
 			}
