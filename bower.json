@@ -1,24 +1,24 @@
 {
-  "name": "diya-survey",
-  "version": "0.8.0",
-  "homepage": "https://github.com/partnering/diya-survey",
-  "authors": [
-    "Sylvain Mahe <sylv.mahe@gmail.com>"
-  ],
-  "description": "Polymer WebComponent for creating user surveys about the environement in which DiyaOne lives",
-  "main": "diya-survey.html",
-  "license": "LGPL v3.0",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "dependencies": {
-    "diya-sdk": "partnering/diya-sdk",
-    "polymer": "Polymer/polymer#0.5",
-    "paper-ripple": "Polymer/paper-ripple#~0.5.6",
-    "core-animated-pages": "Polymer/core-animated-pages#~0.5.6"
-  }
+	"name": "diya-survey",
+	"version": "0.8.0",
+	"homepage": "https://github.com/partnering/diya-survey",
+	"authors": [
+		"Sylvain Mahe <sylv.mahe@gmail.com>"
+	],
+	"description": "Polymer WebComponent for creating user surveys about the environement in which DiyaOne lives",
+	"main": "diya-survey.html",
+	"license": "LGPL v3.0",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"diya-sdk": "partnering/diya-sdk",
+		"polymer": "Polymer/polymer#~1.1.5",
+		"paper-ripple": "PolymerElements/paper-ripple#~1.0.2",
+		"neon-animated-pages": "PolymerElements/neon-animated-pages#1.x.x"
+	}
 }
