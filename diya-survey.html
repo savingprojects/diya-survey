@@ -92,96 +92,96 @@
 
 
 	</template>
-  <script>
-    Polymer({
-      is: 'diya-survey',
-      properties: {
-        from: {
-          type: String,
-          value: 'anonymous',
-          notify: true
-        },
-        leafCount: {
-          type: Number,
-          value: 5,
-          notify: true
-        },
-        maxLabel: { notify: true },
-        minLabel: { notify: true },
-        question: { notify: true },
-        selector: { notify: true },
-        threshold: {
-          type: Number,
-          value: 1,
-          notify: true
-        },
-        ticketDesc: { notify: true },
-        ticketType: { notify: true }
-      },
-      ready: function () {
-        this.leaves = [];
-        this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
-        this.leafIcon = [
-          'bower_components/diya-survey/leaf_off.png',
-          'bower_components/diya-survey/leaf.png'
-        ];
-        for (var i = 0; i < this.leafCount; i++) {
-          this.leaves.push(0);
-        }
-        this.setLevel(this.level);
-      },
-      setLevel: function (level) {
-        this.level = level;
-        for (var i = 0; i < this.leaves.length; i++) {
-          if (i <= level)
-            this.set('leaves' + ('.' + i), 1);
-          else
-            this.set('leaves' + ('.' + i), 0);
-        }
-      },
-      postTicket: function () {
-        if (!this.selector)
-          return;
-        d1(this.selector).request({
-          service: 'ticketing',
-          func: 'CreateTicket',
-          data: {
-            from: this.from,
-            description: this.ticketDesc,
-            type: this.ticketType
-          }
-        }, function (peerId, err, data) {
-          console.log(err);
-          console.log(data);
-          console.log(peerId);
-        });
-      },
-      showQuestion: function () {
-        this.set('$.questionPages.selected', 0);
-      },
-      showThanks: function () {
-        this.set('$.questionPages.selected', 1);
-      },
-      actionLevel: function (evt) {
-        var levelId = parseInt(evt.target.attributes['level-id'].value);
-        this.setLevel(levelId);
-      },
-      actionValidate: function (evt) {
-        var that = this;
-        if (this.level < this.threshold) {
-          console.log('alert, posting ticket');
-          this.postTicket();
-        }
-        this.showThanks();
-        setTimeout(function () {
-          that.fire('answered');
-          that.showQuestion();
-        }, 2000);
-        that.setLevel(that.initialLevel);
-      },
-      _computeSrc: function (leaf, leafIcon) {
-        return leafIcon[leaf];
-      }
-    });
-  </script>
 </dom-module>
+<script>
+	Polymer({
+		is: 'diya-survey',
+		properties: {
+			from: {
+				type: String,
+				value: 'anonymous',
+				notify: true
+			},
+			leafCount: {
+				type: Number,
+				value: 5,
+				notify: true
+			},
+			maxLabel: { notify: true },
+			minLabel: { notify: true },
+			question: { notify: true },
+			selector: { notify: true },
+			threshold: {
+				type: Number,
+				value: 1,
+				notify: true
+			},
+			ticketDesc: { notify: true },
+			ticketType: { notify: true }
+		},
+		ready: function () {
+			this.leaves = [];
+			this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
+			this.leafIcon = [
+				'bower_components/diya-survey/leaf_off.png',
+				'bower_components/diya-survey/leaf.png'
+			];
+			for (var i = 0; i < this.leafCount; i++) {
+				this.leaves.push(0);
+			}
+			this.setLevel(this.level);
+		},
+		setLevel: function (level) {
+			this.level = level;
+			for (var i = 0; i < this.leaves.length; i++) {
+				if (i <= level)
+					this.set('leaves' + ('.' + i), 1);
+				else
+					this.set('leaves' + ('.' + i), 0);
+			}
+		},
+		postTicket: function () {
+			if (!this.selector)
+				return;
+			d1(this.selector).request({
+				service: 'ticketing',
+				func: 'CreateTicket',
+				data: {
+					from: this.from,
+					description: this.ticketDesc,
+					type: this.ticketType
+				}
+			}, function (peerId, err, data) {
+				console.log(err);
+				console.log(data);
+				console.log(peerId);
+			});
+		},
+		showQuestion: function () {
+			this.set('$.questionPages.selected', 0);
+		},
+		showThanks: function () {
+			this.set('$.questionPages.selected', 1);
+		},
+		actionLevel: function (evt) {
+			var levelId = parseInt(evt.target.attributes['level-id'].value);
+			this.setLevel(levelId);
+		},
+		actionValidate: function (evt) {
+			var that = this;
+			if (this.level < this.threshold) {
+				console.log('alert, posting ticket');
+				this.postTicket();
+			}
+			this.showThanks();
+			setTimeout(function () {
+				that.fire('answered');
+				that.showQuestion();
+			}, 2000);
+			that.setLevel(that.initialLevel);
+		},
+		_computeSrc: function (leaf, leafIcon) {
+			return leafIcon[leaf];
+		}
+	});
+</script>
