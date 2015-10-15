@@ -120,16 +120,16 @@
 			ticketType: { notify: true }
 		},
 		ready: function () {
-			this.leaves = [];
 			this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
-			this.leafIcon = [
-				'bower_components/diya-survey/leaf_off.png',
-				'bower_components/diya-survey/leaf.png'
-			];
+			this.leaves = [];
+			this.leafIcon = [];
+			this.push('leafIcon','bower_components/leaf-scale/leaf_off.png',
+			          'bower_components/leaf-scale/leaf.png');
 			for (var i = 0; i < this.leafCount; i++) {
-				this.leaves.push(0);
+				this.push('leaves',0);
 			}
 			this.setLevel(this.level);
+			this.showQuestion();
 		},
 		setLevel: function (level) {
 			this.level = level;
