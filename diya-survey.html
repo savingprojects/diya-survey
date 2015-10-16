@@ -71,8 +71,8 @@
 
 				<section id="scale">
 					<section id="leaves">
-						<template is="dom-repeat" items="{{leaves}}" as="leaf" index-as="i">
-							<img src="{{_computeSrc(leaf, leafIcon)}}" level-id="{{i}}" on-tap="actionLevel">
+						<template is="dom-repeat" items="{{leaves}}" as="leaf" index-as="leafind">
+							<img src$="{{_computeSrc(leaf, leafIcon)}}" levelId="{{leafind}}" on-tap="actionLevel">
 						</template>
 					</section>
 
@@ -91,9 +91,9 @@
 		</neon-animated-pages>
 
 
-	</template>
-</dom-module>
-<script>
+  </template>
+
+  <script>
 	Polymer({
 		is: 'diya-survey',
 		properties: {
@@ -107,8 +107,10 @@
 				value: 5,
 				notify: true
 			},
-			maxLabel: { notify: true },
-			minLabel: { notify: true },
+			maxLabel: { notify: true,
+			            type: String},
+			minLabel: { notify: true,
+			            type: String },
 			question: { notify: true },
 			selector: { notify: true },
 			threshold: {
@@ -117,27 +119,30 @@
 				notify: true
 			},
 			ticketDesc: { notify: true },
-			ticketType: { notify: true }
+			ticketType: { notify: true },
+			leaves: { notify: true }
 		},
 		ready: function () {
-			this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
+			console.log(this.question);
+			console.log(this.minLabel);
+			console.log(this.maxLabel);
 			this.leaves = [];
 			this.leafIcon = [];
-			this.push('leafIcon','bower_components/leaf-scale/leaf_off.png',
-			          'bower_components/leaf-scale/leaf.png');
+			this.push('leafIcon', "bower_components/diya-survey/leaf_off.png", "bower_components/diya-survey/leaf.png");
 			for (var i = 0; i < this.leafCount; i++) {
 				this.push('leaves',0);
 			}
-			this.setLevel(this.level);
 			this.showQuestion();
+			this.initialLevel = this.level = Math.round(this.leafCount / 2) - 1;
+			this.setLevel(this.level);
 		},
 		setLevel: function (level) {
 			this.level = level;
 			for (var i = 0; i < this.leaves.length; i++) {
-				if (i <= level)
-					this.set('leaves' + ('.' + i), 1);
-				else
-					this.set('leaves' + ('.' + i), 0);
+				if (i <= level) 
+					this.splice('leaves', i, 1, 1);
+				else 
+					this.splice('leaves', i, 1, 0);
 			}
 		},
 		postTicket: function () {
@@ -164,8 +169,7 @@
 			this.set('$.questionPages.selected', 1);
 		},
 		actionLevel: function (evt) {
-			var levelId = parseInt(evt.target.attributes['level-id'].value);
-			this.setLevel(levelId);
+			this.setLevel(evt.model.get('leafind'));
 		},
 		actionValidate: function (evt) {
 			var that = this;
@@ -185,3 +189,5 @@
 		}
 	});
 </script>
+
+</dom-module>
