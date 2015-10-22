@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../neon-animation/neon-animated-pages.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 
 
 <dom-module id="diya-survey">
@@ -13,6 +15,12 @@
 				position: relative;
 				color: white;
 				text-shadow: 2px 2px #000;
+			}
+
+			#validate{
+				display: flex;
+				justify-content: center;
+				align-items: center;
 			}
 
 			#questionPages{
@@ -64,7 +72,7 @@
 		</style>
   <template>
 
-		<neon-animated-pages id="questionPages" transitions="cross-fade-all">
+		<neon-animated-pages id="questionPages" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
 
 			<section id="question">
 				<h1>{{question}}</h1>
@@ -78,11 +86,15 @@
 
 					<section id="labels">
 						<p>{{minLabel}}</p>
-						<p>neutre</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
 						<p>{{maxLabel}}</p>
 					</section>
 
-					<paper-button on-tap="actionValidate">Valider votre réponse</paper-button>
+					<div id="validate">
+						<paper-fab on-tap="actionValidate" icon="check" style="color: white; background: #42C517"></paper-fab>
+						<paper-button on-tap="actionValidate">Valider votre réponse</paper-button>
+						<paper-fab on-tap="actionValidate" icon="check" style="color: white; background: #42C517"></paper-fab>
+					</div>
 				</section>
 			</section>
 			<section id="thanks">
